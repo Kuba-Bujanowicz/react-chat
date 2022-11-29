@@ -4,4 +4,7 @@ export interface Auth {
   user: User | null;
   error: string;
   getCurrentUser: () => void;
+  signup: (email: string, name: string) => void;
+  signin: (email: string) => void;
+  logout: () => void;
 }
