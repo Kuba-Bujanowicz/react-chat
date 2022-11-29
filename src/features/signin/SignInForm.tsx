@@ -19,13 +19,13 @@ const SignInForm = () => {
     email: '',
   });
   const binder = new FormHelper<SignInData, Errors>(state, setState, setErrors);
-  const { getCurrentUser, signin } = useAuth();
+  const { signin, authToken } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await signin(state.email);
-    await getCurrentUser();
+    await authToken();
     navigate('/');
   };
 
