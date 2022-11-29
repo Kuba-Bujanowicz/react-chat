@@ -13,7 +13,7 @@ export class Api {
     return this.responseHandler(response);
   }
 
-  static async post(url: string, data: any) {
+  static async post(url: string, data?: any) {
     const response = await Axios.post(url, data);
     return this.responseHandler(response);
   }
