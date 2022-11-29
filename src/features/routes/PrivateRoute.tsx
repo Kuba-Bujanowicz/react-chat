@@ -3,11 +3,9 @@ import { Outlet, Navigate, RouteProps } from 'react-router-dom';
 import { useAuth } from '../../common/context/AuthProvider';
 
 const PrivateRoute: React.FC<RouteProps> = () => {
-  const { user, getCurrentUser } = useAuth();
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
-  return true ? <Outlet /> : <Navigate to='/signin' />;
+  const { user } = useAuth();
+
+  return user ? <Outlet /> : <Navigate to='/signin' />;
 };
 
 export default PrivateRoute;
