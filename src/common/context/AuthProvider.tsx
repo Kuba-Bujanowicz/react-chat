@@ -12,17 +12,42 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   const getCurrentUser = async () => {
     try {
-      console.log('fetching');
-      const response = await Api.get('/currentUser');
-      console.log(response);
+      const response = (await Api.get('/currentUser')) as User;
+      setUser(response);
     } catch (error: any) {
-      console.log(error.response.data);
       setError('Cannot get user');
+    }
+  };
+
+  const signup = async (email: string, name: string) => {
+    try {
+      await Api.post('/signup', { email, name });
+    } catch (error: any) {
+      setError('Wrong email or name');
+    }
+  };
+
+  const signin = async (email: string) => {
+    try {
+      await Api.post('/signin', { email });
+    } catch (error: any) {
+      setError('Wrong credentials');
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await Api.post('/logout');
+    } catch (error) {
+      setError('Cannot logout');
     }
   };
 
   const data = {
     getCurrentUser,
+    signup,
+    signin,
+    logout,
     user,
     error,
   };
