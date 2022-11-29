@@ -4,3 +4,9 @@ export interface User {
   email: string;
   isActive: boolean;
 }
+
+export interface UserContextData {
+  user: User | null;
+  fetchCurrentUser: () => void;
+  error: string;
+}
