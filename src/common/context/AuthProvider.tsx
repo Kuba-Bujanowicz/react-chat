@@ -7,22 +7,13 @@ const AuthContext = createContext<Auth>({} as Auth);
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState('');
-
-  const getCurrentUser = async () => {
-    try {
-      const response = (await Api.get('/currentUser')) as User;
-      setUser(response);
-    } catch (error: any) {
-      setError('Cannot get user');
-    }
-  };
 
   const signup = async (email: string, name: string) => {
     try {
       await Api.post('/signup', { email, name });
-    } catch (error: any) {
+    } catch (error) {
       setError('Wrong email or name');
     }
   };
@@ -30,7 +21,7 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const signin = async (email: string) => {
     try {
       await Api.post('/signin', { email });
-    } catch (error: any) {
+    } catch (error) {
       setError('Wrong credentials');
     }
   };
@@ -43,12 +34,22 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     }
   };
 
+  const authToken = async () => {
+    try {
+      await Api.post('/authToken');
+      setIsAuthenticated(true);
+    } catch (error) {
+      setError('Unauthorized token');
+      setIsAuthenticated(false);
+    }
+  };
+
   const data = {
-    getCurrentUser,
     signup,
     signin,
     logout,
-    user,
+    authToken,
+    isAuthenticated,
     error,
   };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
