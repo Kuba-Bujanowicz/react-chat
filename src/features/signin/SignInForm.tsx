@@ -22,7 +22,8 @@ const SignInForm = () => {
   const { getCurrentUser, signin } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     await signin(state.email);
     await getCurrentUser();
     navigate('/');
