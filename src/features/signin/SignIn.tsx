@@ -7,6 +7,7 @@ const SignIn = () => {
       <div className='signin__form box'>
         <SignInForm />
       </div>
+      <a href='/signup'>Wanna sign up?</a>
     </main>
   );
 };
