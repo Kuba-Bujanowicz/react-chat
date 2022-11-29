@@ -14,21 +14,4 @@ export class FormHelper<T, E> {
   bindText(name: string) {
     return (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, [name]: e.target.value });
   }
-
-  bindSubmit(url: string) {
-    return async (e: React.FormEvent<HTMLFormElement>) => {
-      console.log('Signing up...');
-
-      e.preventDefault();
-      e.stopPropagation();
-      try {
-        const response = await Api.post(url, this.state);
-        console.log(response);
-      } catch (error: any) {
-        console.log(error);
-
-        this.setErrors(error.response.data);
-      }
-    };
-  }
 }
