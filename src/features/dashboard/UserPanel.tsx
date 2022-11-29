@@ -1,8 +1,11 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../common/context/AuthProvider';
+import UserProvider, { useUser } from '../../common/context/UserProvider';
 
 const UserPanel = () => {
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
+  const { user, fetchCurrentUser } = useUser();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -10,13 +13,17 @@ const UserPanel = () => {
     navigate('/signin');
   };
 
+  useEffect(() => {
+    (async () => await fetchCurrentUser())();
+  }, []);
+
   return (
-    <div>
+    <UserProvider>
       <p>id: {user?.id}</p>
       <p>email: {user?.email}</p>
       <p>name: {user?.name}</p>
       <button onClick={handleLogout}>logout</button>
-    </div>
+    </UserProvider>
   );
 };
 
