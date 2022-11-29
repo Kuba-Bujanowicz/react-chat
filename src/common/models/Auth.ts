@@ -1,10 +1,11 @@
+import { AxiosPromise } from 'axios';
 import { User } from './User';
 
 export interface Auth {
-  user: User | null;
   error: string;
-  getCurrentUser: () => void;
+  isAuthenticated: boolean;
   signup: (email: string, name: string) => void;
   signin: (email: string) => void;
   logout: () => void;
+  authToken: () => void;
 }
