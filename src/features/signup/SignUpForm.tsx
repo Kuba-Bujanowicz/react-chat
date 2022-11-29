@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../common/context/AuthProvider';
 import { FormHelper } from '../../common/helpers/FormHelper';
 
 interface SignUpData {
@@ -21,8 +23,17 @@ const SignUpForm = () => {
     name: '',
   });
   const binder = new FormHelper<SignUpData, Errors>(state, setState, setErrors);
+  const { getCurrentUser, signup } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    await signup(state.email, state.name);
+    await getCurrentUser();
+    navigate('/');
+  };
+
   return (
-    <form onSubmit={binder.bindSubmit('/signup')}>
+    <form onSubmit={handleSubmit}>
       <div>
         <input type='email' name='email' placeholder='Email address' onChange={binder.bindText('email')} />
         <div>{errors.email || ''}</div>
