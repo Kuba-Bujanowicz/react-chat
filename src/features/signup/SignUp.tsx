@@ -7,7 +7,7 @@ const SignUp = () => {
       <div className='signup__form box'>
         <SignUpForm />
       </div>
-      <a href='/signin'>Already signed up</a>
+      <a href='/signin'>Already signed up?</a>
     </main>
   );
 };
