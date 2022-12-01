@@ -1,9 +1,8 @@
 export interface Auth {
   isAuthenticated: boolean;
-  isAuthenticating: boolean;
   isLoading: boolean;
-  signup: (email: string, name: string) => void;
-  signin: (email: string) => void;
-  checkAuth: () => void;
-  logout: () => void;
+  signup: (email: string, name: string) => Promise<void>;
+  signin: (email: string) => Promise<void>;
+  checkAuth: () => Promise<void>;
+  logout: () => Promise<void>;
 }
