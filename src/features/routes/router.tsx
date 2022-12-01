@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Page404 from '../../components/404/Page404';
 import UserPanel from '../dashboard/UserPanel';
-import SignIn from '../signin/Signin';
+import SignIn from '../signin/SignIn';
 import SignUp from '../signup/SignUp';
 import PrivateRoute from './PrivateRoute';
 
