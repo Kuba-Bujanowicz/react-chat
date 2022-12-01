@@ -11,21 +11,23 @@ interface SignUpData {
 const SignUpForm = () => {
   const [state, setState] = useState<SignUpData>({} as SignUpData);
   const binder = new FormHelper<SignUpData>(setState);
-  const { signup, isLoading } = useAuth();
+  const { signup, isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isLoading]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
     await signup(state.email, state.name);
-    navigate('/');
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {isLoading ? <div>Loading...</div> : null}
-
       <div>
         <input type='email' name='email' placeholder='Email address' onChange={binder.bindText('email')} />
         {/* <div>{errors.email || ''}</div> */}
@@ -34,7 +36,7 @@ const SignUpForm = () => {
         <input type='text' name='name' placeholder='Name' onChange={binder.bindText('name')} />
         {/* <div>{errors.name || ''}</div> */}
       </div>
-      <input type='submit' value='Zarejestruj' />
+      <input type='submit' value={isLoading ? 'Signing up' : 'Sign Up'} disabled={isLoading} />
     </form>
   );
 };

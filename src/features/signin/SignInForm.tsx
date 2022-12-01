@@ -17,13 +17,12 @@ const SignInForm = () => {
     if (isAuthenticated) {
       navigate('/');
     }
-  }, [isAuthenticated]);
+  }, [isLoading]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
     await signin(state.email);
-    setTimeout(() => navigate('/'), 0);
   };
 
   return (
@@ -32,7 +31,7 @@ const SignInForm = () => {
         <input type='email' name='email' placeholder='Email address' onChange={binder.bindText('email')} />
         {/* <div>{errors.email || ''}</div> */}
       </div>
-      <input type='submit' value={isLoading ? 'Signing in...' : 'Sign In'} disabled={!!isLoading} />
+      <input type='submit' value={isLoading ? 'Signing in...' : 'Sign In'} disabled={isLoading} />
     </form>
   );
 };

@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../common/context/AuthProvider';
-import UserProvider, { useUser } from '../../common/context/UserProvider';
+import { useUser } from '../../common/context/UserProvider';
 
 const UserPanel = () => {
-  const { logout, isLoading, isAuthenticated } = useAuth();
+  const { logout } = useAuth();
   const { user, fetchCurrentUser } = useUser();
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
@@ -16,9 +14,7 @@ const UserPanel = () => {
     (async () => await fetchCurrentUser())();
   }, []);
 
-  return isLoading ? (
-    <div>Loading...</div>
-  ) : (
+  return (
     <div>
       <p>id: {user ? user.id : 'Loading...'}</p>
       <p>email: {user ? user.email : 'Loading...'}</p>
