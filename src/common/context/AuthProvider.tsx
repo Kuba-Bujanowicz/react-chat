@@ -1,56 +1,72 @@
-import { createContext, useContext, useState } from 'react';
-import { Api } from '../base/Api';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { Auth } from '../models/Auth';
-import { User } from '../models/User';
+import { authLogout, authSignIn, authSignUp, verifyToken } from '../services/auth';
 
 const AuthContext = createContext<Auth>({} as Auth);
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+
+  const checkAuth = async () => {
+    try {
+      setIsAuthenticating(true);
+      setIsLoading(true);
+      await verifyToken();
+      setIsAuthenticated(true);
+    } catch {
+      setIsAuthenticated(false);
+    } finally {
+      setIsAuthenticating(false);
+      setIsLoading(false);
+    }
+  };
 
   const signup = async (email: string, name: string) => {
     try {
-      await Api.post('/signup', { email, name });
-    } catch (error) {
-      setError('Wrong email or name');
+      setIsLoading(true);
+      await authSignUp({ email, name });
+      setIsAuthenticated(true);
+    } catch {
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const signin = async (email: string) => {
     try {
-      await Api.post('/signin', { email });
-    } catch (error) {
-      setError('Wrong credentials');
+      setIsLoading(true);
+      await authSignIn({ email });
+      setIsAuthenticated(true);
+    } catch {
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const logout = async () => {
     try {
-      await Api.post('/logout');
-    } catch (error) {
-      setError('Cannot logout');
-    }
-  };
+      setIsLoading(true);
 
-  const authToken = async () => {
-    try {
-      await Api.post('/authToken');
-      setIsAuthenticated(true);
-    } catch (error) {
-      setError('Unauthorized token');
+      await authLogout();
+    } finally {
       setIsAuthenticated(false);
+      setIsLoading(false);
     }
   };
 
   const data = {
+    checkAuth,
     signup,
     signin,
     logout,
-    authToken,
     isAuthenticated,
-    error,
+    isAuthenticating,
+    isLoading,
   };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };
