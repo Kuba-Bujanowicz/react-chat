@@ -1,47 +1,53 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Auth } from '../models/Auth';
+import { Auth, AuthErrors, SignInData, SignUpData } from '../models/Auth';
 import { authLogout, authSignIn, authSignUp, verifyToken } from '../services/auth';
 
 const AuthContext = createContext<Auth>({} as Auth);
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<AuthErrors>({});
 
   useEffect(() => {
+    setIsAuthenticating(true);
     checkAuth();
   }, []);
 
+  const handleReject = (errors: any) => {
+    setIsAuthenticated(false);
+    setErrors(errors.response.data);
+    setIsLoading(false);
+    setIsAuthenticating(false);
+  };
+
+  const handleResolve = () => {
+    setIsAuthenticated(true);
+    setIsAuthenticating(false);
+    setIsLoading(false);
+  };
+
   const checkAuth = () => {
-    setIsLoading(true);
-    return verifyToken()
-      .then(() => setIsAuthenticated(true))
-      .catch(() => setIsAuthenticated(false))
-      .finally(() => setIsLoading(false));
+    return verifyToken().then(handleResolve).catch(handleReject);
   };
 
-  const signup = (email: string, name: string) => {
+  const signup = (credentials: SignUpData) => {
     setIsLoading(true);
-    return authSignUp({ email, name })
-      .then(() => setIsAuthenticated(true))
-      .catch(() => setIsAuthenticated(false))
-      .finally(() => setIsLoading(false));
+    return authSignUp(credentials).then(handleResolve).catch(handleReject);
   };
 
-  const signin = (email: string) => {
+  const signin = (credentials: SignInData) => {
     setIsLoading(true);
-    return authSignIn({ email })
-      .then(() => setIsAuthenticated(true))
-      .catch(() => setIsAuthenticated(false))
-      .finally(() => setIsLoading(false));
+    return authSignIn(credentials).then(handleResolve).catch(handleReject);
   };
 
   const logout = () => {
     setIsLoading(true);
     return authLogout()
       .then(() => setIsAuthenticated(false))
-      .catch(() => setIsAuthenticated(false))
+      .catch(handleReject)
       .finally(() => setIsLoading(false));
   };
 
@@ -51,7 +57,9 @@ const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     signin,
     logout,
     isAuthenticated,
+    isAuthenticating,
     isLoading,
+    errors,
   };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };
