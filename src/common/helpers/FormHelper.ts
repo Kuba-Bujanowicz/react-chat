@@ -8,4 +8,12 @@ export class FormHelper<T> {
   bindText(name: string) {
     return (e: React.ChangeEvent<HTMLInputElement>) => this.setState((prevState) => ({ ...prevState, [name]: e.target.value }));
   }
+
+  bindSubmit(cb: Function) {
+    return (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      cb();
+    };
+  }
 }
