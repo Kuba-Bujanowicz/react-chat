@@ -7,6 +7,5 @@ export interface User {
 
 export interface UserContextData {
   user: User | null;
-  fetchCurrentUser: () => void;
   error: string;
 }
