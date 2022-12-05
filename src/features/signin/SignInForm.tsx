@@ -2,34 +2,29 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../common/context/AuthProvider';
 import { FormHelper } from '../../common/helpers/FormHelper';
-
-interface SignInData {
-  email: string;
-}
+import { SignInData } from '../../common/models/Auth';
 
 const SignInForm = () => {
   const [state, setState] = useState<SignInData>({} as SignInData);
+  const { signin, isLoading, isAuthenticated, isAuthenticating, errors } = useAuth();
   const binder = new FormHelper<SignInData>(setState);
-  const { signin, isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }
-  }, [isLoading]);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    await signin(state.email);
-  };
+  }, [isLoading, isAuthenticating]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={binder.bindSubmit(signin)}>
       <div>
         <input type='email' name='email' placeholder='Email address' onChange={binder.bindText('email')} />
-        {/* <div>{errors.email || ''}</div> */}
+        <div>{errors.email}</div>
+      </div>
+      <div>
+        <input type='password' name='password' placeholder='Password' onChange={binder.bindText('password')} />
+        <div>{errors.password}</div>
       </div>
       <input type='submit' value={isLoading ? 'Signing in...' : 'Sign In'} disabled={isLoading} />
     </form>
