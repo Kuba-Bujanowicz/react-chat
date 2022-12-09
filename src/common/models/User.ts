@@ -2,7 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  isActive: boolean;
+  isVerified: boolean;
 }
 
 export interface UserContextData {
