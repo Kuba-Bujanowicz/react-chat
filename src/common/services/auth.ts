@@ -1,10 +1,6 @@
 import { Api } from '../base/Api';
 import { SignInData, SignUpData } from '../models/Auth';
 
-export const verifyToken = () => {
-  return Api.post('/authToken');
-};
-
 export const authSignUp = (credentials: SignUpData) => {
   return Api.post('/signup', credentials);
 };

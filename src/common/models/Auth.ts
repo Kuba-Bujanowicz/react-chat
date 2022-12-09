@@ -1,3 +1,5 @@
+import { User } from './User';
+
 export interface SignUpData {
   email: string;
   name: string;
@@ -19,12 +21,9 @@ export interface AuthErrors {
 }
 
 export interface Auth {
-  isAuthenticated: boolean;
-  isAuthenticating: boolean;
   isLoading: boolean;
-  errors: AuthErrors;
+  user: User | null;
   signup: (credentials: SignUpData) => Promise<void>;
   signin: (credentials: SignInData) => Promise<void>;
-  checkAuth: () => Promise<void>;
   logout: () => Promise<void>;
 }
