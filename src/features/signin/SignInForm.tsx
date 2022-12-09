@@ -6,25 +6,25 @@ import { SignInData } from '../../common/models/Auth';
 
 const SignInForm = () => {
   const [state, setState] = useState<SignInData>({} as SignInData);
-  const { signin, isLoading, isAuthenticated, isAuthenticating, errors } = useAuth();
+  const { signin, isLoading, user } = useAuth();
   const binder = new FormHelper<SignInData>(setState);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (user) {
       navigate('/');
     }
-  }, [isLoading, isAuthenticating]);
+  }, [isLoading]);
 
   return (
-    <form onSubmit={binder.bindSubmit(signin)}>
+    <form onSubmit={binder.bindSubmit(signin.bind(this, state))}>
       <div>
         <input type='email' name='email' placeholder='Email address' onChange={binder.bindText('email')} />
-        <div>{errors.email}</div>
+        {/* <div>{errors.email}</div> */}
       </div>
       <div>
         <input type='password' name='password' placeholder='Password' onChange={binder.bindText('password')} />
-        <div>{errors.password}</div>
+        {/* <div>{errors.password}</div> */}
       </div>
       <input type='submit' value={isLoading ? 'Signing in...' : 'Sign In'} disabled={isLoading} />
     </form>
