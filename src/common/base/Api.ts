@@ -1,6 +1,6 @@
 import Axios, { AxiosResponse } from 'axios';
 
-Axios.defaults.baseURL = 'http://localhost:4000';
+Axios.defaults.baseURL = 'http://localhost:4000/api';
 Axios.defaults.withCredentials = true;
 
 export class Api {
