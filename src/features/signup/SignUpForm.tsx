@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../common/context/AuthProvider';
+import { useUser } from '../../common/context/UserProvider';
 import { FormHelper } from '../../common/helpers/FormHelper';
 import { SignUpData } from '../../common/models/Auth';
 
 const SignUpForm = () => {
   const [state, setState] = useState<SignUpData>({} as SignUpData);
-  const { signup, isAuthenticating, errors } = useAuth();
+  const { signup, isSubmitting, errors } = useAuth();
+  const { fetchUser } = useUser();
   const binder = new FormHelper<SignUpData>(setState);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     await signup(state);
-    setTimeout(() => navigate('/erify-email'), 0);
+    fetchUser();
+    navigate('/verify-email');
   };
 
   return (
@@ -34,7 +37,7 @@ const SignUpForm = () => {
         <input type='password' name='passwordConfirm' placeholder='Confirm your password' onChange={binder.bindText('passwordConfirm')} />
         <div>{errors.passwordConfirm}</div>
       </div>
-      <input type='submit' value={isAuthenticating ? 'Signing up' : 'Sign Up'} disabled={isAuthenticating} />
+      <input type='submit' value={isSubmitting ? 'Signing up' : 'Sign Up'} disabled={isSubmitting} />
     </form>
   );
 };

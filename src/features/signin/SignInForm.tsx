@@ -7,13 +7,15 @@ import { SignInData } from '../../common/models/Auth';
 
 const SignInForm = () => {
   const [state, setState] = useState<SignInData>({} as SignInData);
-  const { signin, isAuthenticating, errors } = useAuth();
+  const { signin, isSubmitting, errors } = useAuth();
+  const { fetchUser } = useUser();
   const binder = new FormHelper<SignInData>(setState);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     await signin(state);
-    setTimeout(() => navigate('/'), 0);
+    fetchUser();
+    navigate('/');
   };
 
   return (
@@ -27,7 +29,7 @@ const SignInForm = () => {
         <input type='password' name='password' placeholder='Password' onChange={binder.bindText('password')} />
         <div>{errors.password}</div>
       </div>
-      <input type='submit' value={isAuthenticating ? 'Signing in...' : 'Sign In'} disabled={isAuthenticating} />
+      <input type='submit' value={isSubmitting ? 'Signing in...' : 'Sign In'} disabled={isSubmitting} />
     </form>
   );
 };
