@@ -14,6 +14,9 @@ const SignUpForm = () => {
 
   const handleSubmit = async () => {
     await signup(state);
+    if (Object.keys(errors).length !== 0) {
+      return;
+    }
     fetchUser();
     navigate('/verify-email');
   };

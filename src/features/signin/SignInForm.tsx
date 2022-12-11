@@ -14,6 +14,9 @@ const SignInForm = () => {
 
   const handleSubmit = async () => {
     await signin(state);
+    if (Object.keys(errors).length !== 0) {
+      return;
+    }
     fetchUser();
     navigate('/');
   };
