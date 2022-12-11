@@ -5,6 +5,7 @@ import EmailVerification from '../emailVerification/EmailVerification';
 import SignIn from '../signin/SignIn';
 import SignUp from '../signup/SignUp';
 import PrivateRoute from './PrivateRoute';
+import VerifiedRoute from './VerifiedRoute';
 
 export const router = createBrowserRouter([
   {
@@ -16,16 +17,20 @@ export const router = createBrowserRouter([
     element: <SignIn />,
   },
   {
-    path: '/verify-email',
-    element: <EmailVerification />,
-  },
-  {
     path: '/',
     element: <PrivateRoute />,
     children: [
       {
+        path: '/verify-email',
+        element: <EmailVerification />,
+      },
+      {
         path: '/',
-        element: <UserPanel />,
+        element: (
+          <VerifiedRoute>
+            <UserPanel />
+          </VerifiedRoute>
+        ),
       },
     ],
     errorElement: <Page404 />,
