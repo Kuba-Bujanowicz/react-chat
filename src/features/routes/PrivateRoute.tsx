@@ -6,7 +6,7 @@ const PrivateRoute: React.FC<RouteProps> = () => {
   const { isAuthenticated, isAuthenticating } = useAuth();
   const { user, isLoading } = useUser();
 
-  return isAuthenticating || isLoading ? null : isAuthenticated && user ? <Outlet /> : <Navigate to='/signin' />;
+  return isAuthenticating || isLoading ? null : isAuthenticated && user ? <Outlet /> : <Navigate to='/signin' replace />;
 };
 
 export default PrivateRoute;
