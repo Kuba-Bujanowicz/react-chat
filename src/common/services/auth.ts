@@ -12,3 +12,7 @@ export const authSignIn = (credentials: SignInData) => {
 export const authLogout = () => {
   return Api.post('/logout');
 };
+
+export const checkAuth = () => {
+  return Api.get('/check-auth');
+};
