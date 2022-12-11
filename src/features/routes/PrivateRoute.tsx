@@ -1,11 +1,12 @@
 import { Outlet, Navigate, RouteProps } from 'react-router-dom';
 import { useAuth } from '../../common/context/AuthProvider';
+import { useUser } from '../../common/context/UserProvider';
 
 const PrivateRoute: React.FC<RouteProps> = () => {
-  const { isLoading, user } = useAuth();
-  console.log(isLoading, user);
+  const { isAuthenticated, isAuthenticating } = useAuth();
+  const { user, isLoading } = useUser();
 
-  return isLoading ? null : user ? user.isVerified ? <Outlet /> : <Navigate to={`verify-email/${user.email}`} /> : <Navigate to='/signin' />;
+  return isAuthenticating || isLoading ? null : isAuthenticated && user ? <Outlet /> : <Navigate to='/signin' />;
 };
 
 export default PrivateRoute;
