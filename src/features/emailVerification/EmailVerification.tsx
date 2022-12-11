@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useAuth } from '../../common/context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { useEmail } from './useEmail';
 import { useUser } from '../../common/context/UserProvider';
@@ -7,6 +6,15 @@ import { useUser } from '../../common/context/UserProvider';
 const EmailVerification = () => {
   const { sendLink, isEmailVerificationSent, isEmailVerificationLoading } = useEmail();
   const { user } = useUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (user?.isVerified) {
+        navigate('/');
+      }
+    }, 1000);
+  }, []);
 
   return (
     user && (
