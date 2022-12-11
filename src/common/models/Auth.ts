@@ -23,6 +23,7 @@ export interface AuthErrors {
 export interface Auth {
   isAuthenticating: boolean;
   isAuthenticated: boolean;
+  isSubmitting: boolean;
   errors: AuthErrors;
   signup: (credentials: SignUpData) => Promise<void>;
   signin: (credentials: SignInData) => Promise<void>;
