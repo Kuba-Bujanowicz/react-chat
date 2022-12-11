@@ -8,6 +8,7 @@ export const useAuth = () => React.useContext(AuthContext);
 const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errors, setErrors] = useState<AuthErrors>({} as AuthErrors);
 
   useEffect(() => {
@@ -23,32 +24,33 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   };
 
   const signup = async (credentials: SignUpData) => {
-    setIsAuthenticating(true);
+    setIsSubmitting(true);
     return authSignUp(credentials)
       .then(() => setIsAuthenticated(true))
       .catch((error) => setErrors(error.response.data))
-      .finally(() => setIsAuthenticating(false));
+      .finally(() => setIsSubmitting(false));
   };
 
   const signin = async (credentials: SignInData) => {
-    setIsAuthenticating(true);
+    setIsSubmitting(true);
     return authSignIn(credentials)
       .then(() => setIsAuthenticated(true))
       .catch((error) => setErrors(error.response.data))
-      .finally(() => setIsAuthenticating(false));
+      .finally(() => setIsSubmitting(false));
   };
 
   const logout = async () => {
-    setIsAuthenticating(true);
+    setIsSubmitting(true);
     return authLogout()
       .then(() => setIsAuthenticated(false))
-      .finally(() => setIsAuthenticating(false));
+      .finally(() => setIsSubmitting(false));
   };
 
   const auth: Auth = {
     errors,
     isAuthenticating,
     isAuthenticated,
+    isSubmitting,
     signup,
     signin,
     logout,
