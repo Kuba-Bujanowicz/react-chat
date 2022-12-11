@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../common/context/AuthProvider';
-import useUser from './useUser';
+import { useUser } from '../../common/context/UserProvider';
 
 const UserPanel = () => {
   const { logout } = useAuth();
@@ -7,9 +9,9 @@ const UserPanel = () => {
 
   return (
     <div>
-      <p>id: {user ? user.id : 'Loading...'}</p>
       <p>email: {user ? user.email : 'Loading...'}</p>
       <p>name: {user ? user.name : 'Loading...'}</p>
+      <p>verified: {user ? String(user.isVerified) : 'Loading...'}</p>
       <button onClick={logout}>logout</button>
     </div>
   );
