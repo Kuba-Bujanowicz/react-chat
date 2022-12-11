@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import AuthProvider from './common/context/AuthProvider';
 import UserProvider from './common/context/UserProvider';
+import Loader from './components/hoc/Loader';
 import { router } from './features/routes/router';
 import './global.scss';
 
@@ -12,7 +13,9 @@ root.render(
   <StrictMode>
     <AuthProvider>
       <UserProvider>
-        <RouterProvider router={router} />
+        <Loader>
+          <RouterProvider router={router} />
+        </Loader>
       </UserProvider>
     </AuthProvider>
   </StrictMode>
