@@ -2,17 +2,11 @@ import { useEffect } from 'react';
 import { useAuth } from '../../common/context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { useEmail } from './useEmail';
+import { useUser } from '../../common/context/UserProvider';
 
 const EmailVerification = () => {
   const { sendLink, isEmailVerificationSent, isEmailVerificationLoading } = useEmail();
-  const { user, isLoading } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      navigate('/signin');
-    }
-  }, [isLoading]);
+  const { user } = useUser();
 
   return (
     user && (
