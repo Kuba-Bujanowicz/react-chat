@@ -4,17 +4,18 @@ import UserPanel from '../dashboard/UserPanel';
 import EmailVerification from '../emailVerification/EmailVerification';
 import SignIn from '../signin/SignIn';
 import SignUp from '../signup/SignUp';
+import PersistRedirectRoute from './PersistRedirectRoute';
 import PrivateRoute from './PrivateRoute';
 import VerifiedRoute from './VerifiedRoute';
 
 export const router = createBrowserRouter([
   {
     path: '/signup',
-    element: <SignUp />,
+    element: <PersistRedirectRoute element={<SignUp />} />,
   },
   {
     path: '/signin',
-    element: <SignIn />,
+    element: <PersistRedirectRoute element={<SignIn />} />,
   },
   {
     path: '/',
@@ -26,11 +27,13 @@ export const router = createBrowserRouter([
       },
       {
         path: '/',
-        element: (
-          <VerifiedRoute>
-            <UserPanel />
-          </VerifiedRoute>
-        ),
+        element: <VerifiedRoute />,
+        children: [
+          {
+            path: '/',
+            element: <UserPanel />,
+          },
+        ],
       },
     ],
     errorElement: <Page404 />,
