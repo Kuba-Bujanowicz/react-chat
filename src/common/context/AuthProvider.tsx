@@ -1,57 +1,58 @@
-import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
-import { Api } from '../base/Api';
-import { Auth, SignInData, SignUpData } from '../models/Auth';
-import { User } from '../models/User';
-import { authLogout, authSignIn, authSignUp } from '../services/auth';
+import React, { createContext, PropsWithChildren, useEffect, useState } from 'react';
+import { Auth, AuthErrors, SignInData, SignUpData } from '../models/Auth';
+import { authLogout, authSignIn, authSignUp, checkAuth } from '../services/auth';
 
 const AuthContext = createContext<Auth>({} as Auth);
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => React.useContext(AuthContext);
 
 const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [errors, setErrors] = useState<AuthErrors>({} as AuthErrors);
 
   useEffect(() => {
-    getUser();
+    verifyAuth();
   }, []);
 
-  const getUser = () => {
-    setIsLoading(true);
-    return Api.get('/current-user')
-      .then((response) => setUser(response))
-      .catch(() => setUser(null))
-      .finally(() => setIsLoading(false));
+  const verifyAuth = async () => {
+    setIsAuthenticating(true);
+    return checkAuth()
+      .then(() => setIsAuthenticated(true))
+      .catch(() => setIsAuthenticated(false))
+      .finally(() => setIsAuthenticating(false));
   };
 
-  const signin = (credentials: SignInData) => {
-    setIsLoading(true);
-    return authSignIn(credentials)
-      .then((response) => setUser(response))
-      .catch(() => setUser(null))
-      .finally(() => setIsLoading(false));
-  };
-  const signup = (credentials: SignUpData) => {
-    setIsLoading(true);
+  const signup = async (credentials: SignUpData) => {
+    setIsAuthenticating(true);
     return authSignUp(credentials)
-      .then((response) => setUser(response))
-      .catch(() => setUser(null))
-      .finally(() => setIsLoading(false));
+      .then(() => setIsAuthenticated(true))
+      .catch((error) => setErrors(error.response.data))
+      .finally(() => setIsAuthenticating(false));
   };
-  const logout = () => {
-    setIsLoading(true);
+
+  const signin = async (credentials: SignInData) => {
+    setIsAuthenticating(true);
+    return authSignIn(credentials)
+      .then(() => setIsAuthenticated(true))
+      .catch((error) => setErrors(error.response.data))
+      .finally(() => setIsAuthenticating(false));
+  };
+
+  const logout = async () => {
+    setIsAuthenticating(true);
     return authLogout()
-      .catch(() => setUser(null))
-      .finally(() => setIsLoading(false));
+      .then(() => setIsAuthenticated(false))
+      .finally(() => setIsAuthenticating(false));
   };
 
   const auth: Auth = {
-    user,
-    isLoading,
-    signin,
+    errors,
+    isAuthenticating,
+    isAuthenticated,
     signup,
+    signin,
     logout,
   };
-
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
