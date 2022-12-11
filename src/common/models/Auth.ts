@@ -21,8 +21,9 @@ export interface AuthErrors {
 }
 
 export interface Auth {
-  isLoading: boolean;
-  user: User | null;
+  isAuthenticating: boolean;
+  isAuthenticated: boolean;
+  errors: AuthErrors;
   signup: (credentials: SignUpData) => Promise<void>;
   signin: (credentials: SignInData) => Promise<void>;
   logout: () => Promise<void>;
