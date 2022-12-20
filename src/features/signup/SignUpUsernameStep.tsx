@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion';
-import { KeyboardEventHandler } from 'react';
+import { KeyboardEventHandler, useState } from 'react';
 import { useAuth } from '../../common/context/AuthProvider';
 import { FormHelper } from '../../common/helpers/FormHelper';
 import { SignUpData } from '../../common/models/Auth';
 import Input from '../../components/input/Input';
 
 type Props = {
-  canMount: boolean;
   binder: FormHelper<SignUpData>;
   state: SignUpData;
   handleNextStep: () => void;
@@ -14,8 +13,9 @@ type Props = {
 
 let timer: any;
 
-const SignUpUsernameStep: React.FC<Props> = ({ canMount, binder, state, handleNextStep }) => {
+const SignUpUsernameStep: React.FC<Props> = ({ binder, state, handleNextStep }) => {
   const { isSubmitting, signup, errors } = useAuth();
+  const [isInputShown, setIsInputShown] = useState(false);
 
   const handleChange = () => {
     clearTimeout(timer);
@@ -24,17 +24,20 @@ const SignUpUsernameStep: React.FC<Props> = ({ canMount, binder, state, handleNe
       handleNextStep();
     }, 2000);
   };
+  const showInput = () => {
+    setIsInputShown(true);
+  };
 
-  return canMount ? (
-    <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ delay: 2 }}>
-      <div>
-        <>
-          <Input type='name' name='name' placeholder='Your name' onChange={binder.bindText('name')} onKeyUp={handleChange} isLoading={isSubmitting} />
-          <div>{errors.name}</div>
-        </>
-      </div>
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} onAnimationComplete={showInput}>
+      <motion.p layoutId='label-name'>How we should call you?</motion.p>
+      {isInputShown && (
+        <motion.div layoutId='name' initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1 }}>
+          <Input type='Name' name='Name' placeholder='Name' onChange={binder.bindText('name')} onKeyUp={handleChange} isLoading={isSubmitting} />
+        </motion.div>
+      )}
     </motion.div>
-  ) : null;
+  );
 };
 
 export default SignUpUsernameStep;
