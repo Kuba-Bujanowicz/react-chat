@@ -3,8 +3,10 @@
 @import "./common/scss/spinner";
 
 
-body {
-    min-height: 100vh;
+body,
+html,
+#root {
+    height: 100%;
 }
 
 * {
