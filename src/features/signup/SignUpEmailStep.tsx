@@ -1,12 +1,11 @@
-import { motion } from 'framer-motion';
-import { KeyboardEventHandler } from 'react';
+import { AnimateSharedLayout, motion } from 'framer-motion';
+import { KeyboardEventHandler, useState } from 'react';
 import { useAuth } from '../../common/context/AuthProvider';
 import { FormHelper } from '../../common/helpers/FormHelper';
 import { SignUpData } from '../../common/models/Auth';
 import Input from '../../components/input/Input';
 
 type Props = {
-  canMount: boolean;
   binder: FormHelper<SignUpData>;
   state: SignUpData;
   handleNextStep: () => void;
@@ -14,8 +13,9 @@ type Props = {
 
 let timer: any;
 
-const SignUpEmailStep: React.FC<Props> = ({ canMount, binder, state, handleNextStep }) => {
+const SignUpEmailStep: React.FC<Props> = ({ binder, state, handleNextStep }) => {
   const { isSubmitting, signup, errors } = useAuth();
+  const [isInputShown, setIsInputShown] = useState(false);
 
   const handleChange = () => {
     clearTimeout(timer);
@@ -25,16 +25,20 @@ const SignUpEmailStep: React.FC<Props> = ({ canMount, binder, state, handleNextS
     }, 2000);
   };
 
-  return canMount ? (
-    <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ delay: 2 }}>
-      <div>
-        <>
+  const showInput = () => {
+    setIsInputShown(true);
+  };
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} onAnimationComplete={showInput}>
+      <motion.p layoutId='label-email'>First we need your email address :)</motion.p>
+      {isInputShown && (
+        <motion.div layoutId='email' initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
           <Input type='email' name='email' placeholder='Email address' onChange={binder.bindText('email')} onKeyUp={handleChange} isLoading={isSubmitting} />
-          <div>{errors.email}</div>
-        </>
-      </div>
+        </motion.div>
+      )}
     </motion.div>
-  ) : null;
+  );
 };
 
 export default SignUpEmailStep;
