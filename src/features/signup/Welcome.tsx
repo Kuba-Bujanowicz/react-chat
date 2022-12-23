@@ -1,31 +1,27 @@
-import { AnimatePresence, motion, Variants } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { useAnimate } from './useAnimate';
+import { AnimatePresence, motion, Variants } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useAnimate } from "./useAnimate";
 
-interface Props {
-  handleNextStep: () => void;
-}
+type Props = {
+  onAnimationComplete: () => void;
+};
 
-const Welcome: React.FC<Props> = ({ handleNextStep }) => {
+const Welcome: React.FC<Props> = ({ onAnimationComplete }) => {
   const { fadeInOut } = useAnimate();
-  const [isShow, setIsShow] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
 
-  const handleAnimationComplete = () => {
-    setIsShow(false);
+  const handleAnimationComplete = (variant: { opacity: number }) => {
+    setIsVisible(false);
+    !variant.opacity && onAnimationComplete();
   };
-
-  useEffect(() => {
-    const timoutId = setTimeout(() => {
-      !isShow && handleNextStep();
-    }, 1500);
-
-    return () => clearTimeout(timoutId);
-  }, [isShow]);
 
   return (
     <AnimatePresence>
-      {isShow && (
-        <motion.div {...fadeInOut(0.5, 1)} onAnimationComplete={handleAnimationComplete}>
+      {isVisible && (
+        <motion.div
+          {...fadeInOut(0.5, 2)}
+          onAnimationComplete={handleAnimationComplete}
+        >
           Hi
         </motion.div>
       )}
