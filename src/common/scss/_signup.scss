@@ -1,7 +1,119 @@
 .signup {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 450px;
+  margin: auto;
+
+  &__title {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    color: rgba($color: #212121, $alpha: 1);
+  }
+
+  &__subtitle {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    margin-bottom: 1rem;
+    color: rgba($color: #646464, $alpha: 1);
+    text-align: center;
+  }
+
+  &__form {
+    width: 100%;
+    margin-top: 2rem;
+  }
+}
+
+.form {
+  &__field {
+    position: relative;
+    margin-bottom: 5px;
+  }
+
+  &__error {
+    padding-left: calc(1rem + 2px);
+    font-size: 0.8rem;
+    color: rgba($color: #fc7575, $alpha: 1);
+  }
+
+  &__icon {
+    position: absolute;
+    right: calc(1rem + 2px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid rgba($color: #dbe4ff, $alpha: 1);
+    background-color: rgba($color: #f3f8ff, $alpha: 1);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      outline: none;
+      border: 2px solid rgba($color: #90acff, $alpha: 1);
+
+      & + .form__label {
+        color: rgba($color: #90acff, $alpha: 1);
+      }
+    }
+
+    &:focus,
+    &:valid {
+      outline: none;
+      border: 2px solid rgba($color: #90acff, $alpha: 1);
+      background-color: white;
+
+      & + .form__label {
+        color: rgba($color: #90acff, $alpha: 1);
+        background-color: white;
+        top: -20%;
+        transform: scale(80%);
+        padding: 0 5px;
+      }
+    }
+
+    &--error {
+      border: 2px solid rgba($color: #fc7575, $alpha: 1);
+      background-color: rgba($color: #fff3f3, $alpha: 1);
+
+      & + .form__label {
+        color: rgba($color: #fc7575, $alpha: 1);
+      }
+
+      &:hover {
+        border: 2px solid rgba($color: #fc7575, $alpha: 1);
+
+        & + .form__label {
+          color: rgba($color: #fc7575, $alpha: 1);
+        }
+      }
+
+      &:focus,
+      &:valid {
+        border: 2px solid rgba($color: #fc7575, $alpha: 1);
+
+        & + .form__label {
+          color: rgba($color: #fc7575, $alpha: 1);
+        }
+      }
+    }
+  }
+
+  &__label {
+    position: absolute;
+    top: 50%;
+    left: calc(1rem + 2px);
+    transform: translate(0, -50%);
+    font-size: 0.8rem;
+    color: rgba($color: #9ea8ca, $alpha: 1);
+    user-select: none;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+  }
 }
