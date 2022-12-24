@@ -1,11 +1,126 @@
-.input {
-    position: relative;
-    display: inline-block;
+$default-color: #dbe4ff;
+$default-bg-color: #f3f8ff;
+$hover-color: #90acff;
+$hover-bg-color: #ffffff;
+$error-color: #fc7575;
+$error-bg-color: #fff3f3;
+$font-color: #b8c9ff;
 
-    &__spinner {
-        position: absolute;
-        right: -30px;
-        top: 50%;
-        transform: translateY(-50%);
+.input {
+  &__ctn {
+    position: relative;
+    margin: 10px 0 5px;
+  }
+
+  &__field {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    padding-right: calc(2rem - 2px + 20px);
+    border-radius: 0.5rem;
+    border: 2px solid $default-color;
+    background-color: $default-bg-color;
+    transition: all 0.2s ease-in-out;
+
+    &:focus,
+    &:valid {
+      outline: none;
+      border: 2px solid $hover-color;
+      background-color: $hover-bg-color;
+
+      & ~ .input__label {
+        color: $hover-color;
+        background-color: $hover-bg-color;
+        top: -20%;
+        transform: scale(80%);
+        padding: 0 5px;
+
+        &::after {
+          background-color: $hover-bg-color;
+        }
+      }
+
+      & ~ .input__icon path {
+        fill: $hover-color;
+      }
     }
+
+    &:valid:not(:focus) {
+      border: 2px solid $default-color;
+      background-color: $default-bg-color;
+      color: $font-color;
+
+      & ~ .input__label {
+        color: $font-color;
+
+        &::after {
+          background-color: $default-bg-color;
+        }
+      }
+
+      & ~ .input__icon path {
+        fill: $default-color;
+      }
+    }
+
+    &:hover,
+    &:valid:hover {
+      outline: none;
+      border: 2px solid $hover-color;
+      color: $hover-color;
+
+      & ~ .input__label {
+        color: $hover-color;
+      }
+
+      & ~ .input__icon path {
+        fill: $hover-color;
+      }
+    }
+  }
+
+  &__label {
+    position: absolute;
+    left: calc(1rem + 2px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: $font-color;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+    position: none;
+
+    &::after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 50%;
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      background-color: $default-bg-color;
+      z-index: -1;
+      transition: all 0.2s ease-in-out;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    right: calc(1rem + 2px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+
+    & svg {
+      display: block;
+    }
+  }
+
+  &__error {
+    font-size: 0.8rem;
+    padding-left: calc(1rem + 2px);
+    color: $error-color;
+  }
 }
