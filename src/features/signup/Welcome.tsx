@@ -7,25 +7,17 @@ type Props = {
 };
 
 const Welcome: React.FC<Props> = ({ onAnimationComplete }) => {
-  const { fadeInOut } = useAnimate();
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleAnimationComplete = (variant: { opacity: number }) => {
-    setIsVisible(false);
-    !variant.opacity && onAnimationComplete();
-  };
+  const { fade } = useAnimate();
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          {...fadeInOut(0.5, 2)}
-          onAnimationComplete={handleAnimationComplete}
-        >
-          Hi
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.p
+      className="signup__welcome"
+      layoutId="signup-welcome"
+      onAnimationComplete={onAnimationComplete}
+      {...fade("in", 0.5, 2)}
+    >
+      Welcome to Vim!
+    </motion.p>
   );
 };
 

@@ -57,18 +57,16 @@ const SignUpFormStepEmail: React.FC<Props> = ({
       >
         First we need your email address :)
       </motion.p>
-      {emailInputVisible && (
-        <motion.div key="email-input" {...slideAndFade("up", "in", 0.5, 1)}>
-          <Input
-            type="email"
-            name="email"
-            placeholder="Email address"
-            onKeyUp={handleEmailValidation}
-            onChange={binder.bindText("email")}
-            isLoading={false}
-          />
-        </motion.div>
-      )}
+      <motion.div key="email-input" {...slideAndFade("up", "in", 0.5, 1)}>
+        <Input
+          type="email"
+          name="email"
+          placeholder="Email address"
+          onKeyUp={handleEmailValidation}
+          onChange={binder.bindText("email")}
+          isLoading={false}
+        />
+      </motion.div>
       {error && (
         <motion.p layoutId="email-error" {...fade("in", 0.5, 1.5)}>
           {error}
